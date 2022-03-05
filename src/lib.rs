@@ -17,7 +17,7 @@ pub fn search_dir(name: &str, query: &str) -> Result<()> {
                         .unwrap()
                         .to_string_lossy()
                         .into_owned();
-        search_file(&path, query);
+        let _ = search_file(&path, query);
     }
     Ok(())
 }
