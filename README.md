@@ -9,8 +9,8 @@ Excercise in Rust.
 GNU GENERAL PUBLIC LICENSE, Version 3
 
 ## Usage
-    seek content
-search all string files in the current directory which contain the string 'content'. If content is an empty string, all lines are matched.
+    seek <query string>
+search all string files in the current directory which contain the query string. If content is an empty string, all lines are matched.
 
 ## Brainstorming
 
@@ -19,17 +19,29 @@ search all string files in the current directory which contain the string 'conte
 
 recursively search the current directory and its descendants
 
-### Filter
-    seek -f name ...
-
-filter for files/directories whith "name" contained in their full name. `^name` considers only names beggining with "name" and `name$` only 
-names ending with "name".
-
 ### Target
     seek -t target ...
-list of targets to search for. Default: `content`. Supported targets:
-1. content: the file content
+target to search for. Supported targets:
+1. content: the file complete contents
 1. path: full file name
+1. name: file name (without path)
+1. dir: file path (without file name)
+1. mdate: file modification date
+1. cdate: file creation date
+1. num: matching line number
+1. line: full matching line 
+
+### Match
+    seek -m operator ...
+match operation to use. Supported operations:
+1. begin: the target content begins with the query string
+1. end: the target content ends with the query string
+1. contains: the target content contains the query string
+1. eq: the target content is equal to the query string
+1. gt: the target content is greater than the query string
+1. gte: the target content is greater than or equal to the query string
+1. lt: the target content is less than the query string
+1. lte: the target content is less than or equal to the query string
 
 ### Output
     seek -o fields ...
