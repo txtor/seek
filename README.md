@@ -23,13 +23,14 @@ recursively search the current directory and its descendants
     seek -t target ...
 target to search for. Supported targets:
 1. content: the file complete contents
+1. line: single line in content
+1. word: single word in content
 1. path: full file name
 1. name: file name (without path)
 1. dir: file path (without file name)
 1. mdate: file modification date
 1. cdate: file creation date
-1. num: matching line number
-1. line: full matching line 
+1. num: line number
 
 ### Match
     seek -m operator ...
