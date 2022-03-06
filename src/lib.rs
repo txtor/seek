@@ -4,8 +4,8 @@ use std::io::{self, BufRead, BufReader};
 
 pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
-pub struct Query<'a> {
-    target :&'a str
+pub struct Query {
+    targets :Vec<String>
 }
 
 pub fn run(query: &Query) -> Result<()> {
@@ -13,8 +13,12 @@ pub fn run(query: &Query) -> Result<()> {
 }
 
 pub fn parse_config(args: &[String]) -> Query {
-    let target = if args.len() > 1 {&args[1]} else {""};
-    Query { target }
+    let targets :Vec<String> = if args.len() > 1 {
+        args[1..].to_vec()
+    } else {
+        Vec::new()
+    };
+    Query { targets }
 }
 
 pub fn search_dir(name: &str, query: &Query) -> Result<()> {
@@ -41,10 +45,17 @@ pub fn search_file(name: &str, query: &Query) -> Result<()> {
         Ok(file) => {
             for (n, line) in file.lines().enumerate() {
                 let lin = line?;
-                if lin.contains(query.target) {
+                let mut found :bool = true;
+                for target in &query.targets {
+                    if (!lin.contains(target)){
+                        found = false;
+                        break;
+                    }
+                }
+                if found {
                     println!("{name}:{n}:{lin}");
                 }
-            }        
+            }
         }
     }
     Ok(())
