@@ -4,8 +4,15 @@ use std::io::{self, BufRead, BufReader};
 
 pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
+#[derive(Debug)]
 pub struct Query {
     targets :Vec<String>
+}
+
+impl Query {
+    pub fn get_targets(&self) -> &[String] {
+        &self.targets
+    }
 }
 
 pub fn run(query: &Query) -> Result<()> {
