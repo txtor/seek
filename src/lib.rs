@@ -4,16 +4,20 @@ use std::io::{self, BufRead, BufReader};
 
 pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
-pub fn run(query: &str) -> Result<()> {
+pub struct Query<'a> {
+    target :&'a str
+}
+
+pub fn run(query: &Query) -> Result<()> {
     search_dir(".", query)
 }
 
-pub fn parse_config(args: &[String]) -> &str {
-    let query = if args.len() > 1 {&args[1]} else {""};
-    query
+pub fn parse_config(args: &[String]) -> Query {
+    let target = if args.len() > 1 {&args[1]} else {""};
+    Query { target }
 }
 
-pub fn search_dir(name: &str, query: &str) -> Result<()> {
+pub fn search_dir(name: &str, query: &Query) -> Result<()> {
     let files = fs::read_dir(name)?;
     for file in files {
         let entry = file?;
@@ -26,18 +30,18 @@ pub fn search_dir(name: &str, query: &str) -> Result<()> {
                         .unwrap()
                         .to_string_lossy()
                         .into_owned();
-        let _ = search_file(&path, query);
+        let _ = search_file(&path, &query);
     }
     Ok(())
 }
 
-pub fn search_file(name: &str, query: &str) -> Result<()> {
+pub fn search_file(name: &str, query: &Query) -> Result<()> {
     match open(name) {
         Err(err) => eprintln!("{}: {}", name, err),
         Ok(file) => {
             for (n, line) in file.lines().enumerate() {
                 let lin = line?;
-                if lin.contains(query) {
+                if lin.contains(query.target) {
                     println!("{name}:{n}:{lin}");
                 }
             }        
