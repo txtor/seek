@@ -61,8 +61,10 @@ Some common operations:
 
     seek -t:dir . 
 search in the current directory 
+
     seek -t:dir -m:begin . 
 search in the current directory  recursively
+
     seek -t:name -m:end txt
 search files with .txt extension
 
