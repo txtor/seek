@@ -14,11 +14,6 @@ search all string files in the current directory which contain the query string.
 
 ## Brainstorming
 
-### Recursive
-    seek -r ...
-
-recursively search the current directory and its descendants
-
 ### Target
     seek -t:<target> ...
 target to search for. Default `content`. Supported targets:
@@ -60,3 +55,17 @@ CSV: `<format>` is the list of output fields separated by a non-word character. 
 1. line: full matching line 
 1. count: number of matches in the current file
 1. target: the name of the matching target
+
+### Alias
+Some common operations:
+
+    seek -t:dir . 
+search in the current directory 
+    seek -t:dir -m:begin . 
+search in the current directory  recursively
+    seek -t:name -m:end txt
+search files with .txt extension
+
+One could define argument alias for common operations. This could be defined at compile time or by the user at a `.seek` file.
+
+
