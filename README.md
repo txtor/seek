@@ -69,3 +69,6 @@ search in the current directory  recursively
 search files with .txt extension
 
 One could define argument alias for common operations. This could be defined at compile time or by the user at a `.seek` file.
+
+### Open Questions
+How to match case sensitive/insensitive? Introducing separate match operators wouldn't be orthogonal, would it? Introduce a "comparer" argument?
