@@ -37,6 +37,12 @@ pub fn search_file(name: &str, query: &Query) -> SeekResult<()> {
         Err(err) => eprintln!("{}: {}", name, err),
         Ok(file) => {
             for (n, line) in file.lines().enumerate() {
+                if let Err(e) = line {
+                    if e.kind() != std::io::ErrorKind::InvalidData {
+                        eprintln!("{}: {}", name, e);
+                    }
+                    break;
+                }
                 let lin = line?;
                 let mut found :bool = true;
                 for target in &query.targets {
