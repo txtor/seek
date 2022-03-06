@@ -1,8 +1,8 @@
-use std::fs;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
+mod dirsearcher;
 
-pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
+pub type SeekResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug)]
 pub struct Query {
@@ -15,8 +15,12 @@ impl Query {
     }
 }
 
-pub fn run(query: &Query) -> Result<()> {
-    search_dir(".", query)
+pub fn run(query: &Query) -> SeekResult<()> {
+    let searcher = dirsearcher::DirSearcher::new(".", true)?;
+    for file in searcher {
+        search_file(&file, query)?;
+    }
+    Ok(())
 }
 
 pub fn parse_config(args: &[String]) -> Query {
@@ -28,25 +32,7 @@ pub fn parse_config(args: &[String]) -> Query {
     Query { targets }
 }
 
-pub fn search_dir(name: &str, query: &Query) -> Result<()> {
-    let files = fs::read_dir(name)?;
-    for file in files {
-        let entry = file?;
-        if entry.file_type().unwrap().is_dir() { 
-            continue;
-        };
-        let path :String = entry
-                        .path()
-                        .file_name()
-                        .unwrap()
-                        .to_string_lossy()
-                        .into_owned();
-        let _ = search_file(&path, &query);
-    }
-    Ok(())
-}
-
-pub fn search_file(name: &str, query: &Query) -> Result<()> {
+pub fn search_file(name: &str, query: &Query) -> SeekResult<()> {
     match open(name) {
         Err(err) => eprintln!("{}: {}", name, err),
         Ok(file) => {
@@ -68,7 +54,7 @@ pub fn search_file(name: &str, query: &Query) -> Result<()> {
     Ok(())
 }
 
-fn open(filename: &str) -> Result<Box<dyn BufRead>> {
+fn open(filename: &str) -> SeekResult<Box<dyn BufRead>> {
     match filename {
         "-" => Ok(Box::new(BufReader::new(io::stdin()))),
         _ => Ok(Box::new(BufReader::new(File::open(filename)?))),
