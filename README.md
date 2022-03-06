@@ -69,5 +69,3 @@ search in the current directory  recursively
 search files with .txt extension
 
 One could define argument alias for common operations. This could be defined at compile time or by the user at a `.seek` file.
-
-

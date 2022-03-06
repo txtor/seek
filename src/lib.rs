@@ -10,7 +10,7 @@ pub fn run(query: &str) -> Result<()> {
 
 pub fn parse_config(args: &[String]) -> &str {
     let query = if args.len() > 1 {&args[1]} else {""};
-    return query;
+    query
 }
 
 pub fn search_dir(name: &str, query: &str) -> Result<()> {
