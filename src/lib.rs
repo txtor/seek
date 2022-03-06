@@ -47,7 +47,7 @@ pub fn search_file(name: &str, query: &Query) -> Result<()> {
                 let lin = line?;
                 let mut found :bool = true;
                 for target in &query.targets {
-                    if (!lin.contains(target)){
+                    if !lin.contains(target){
                         found = false;
                         break;
                     }
