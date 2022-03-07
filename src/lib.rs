@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
-mod dirsearcher;
+pub mod dirsearcher;
 
 pub type SeekResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
