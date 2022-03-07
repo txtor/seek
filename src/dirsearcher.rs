@@ -21,21 +21,19 @@ impl DirSearcher {
 impl Iterator for DirSearcher {
     type Item = DirEntry;
     fn next(&mut self) -> Option<Self::Item> {
-        loop {
-            let mut item = self.entries.next();
-            while item.is_none() {
-                if self.dirs.is_empty() {
-                    return None;
-                }
-                let dir :PathBuf = self.dirs.remove(0);
-                self.entries = fs::read_dir(dir).unwrap();
-                item = self.entries.next();
+        let mut item = self.entries.next();
+        while item.is_none() {
+            if self.dirs.is_empty() {
+                return None;
             }
-            let entry :DirEntry = item?.unwrap();
-            if entry.file_type().unwrap().is_dir() {
-                if self.recur { self.dirs.push(entry.path().clone()); }
-            }
-            return Some(entry)
+            let dir :PathBuf = self.dirs.remove(0);
+            self.entries = fs::read_dir(dir).unwrap();
+            item = self.entries.next();
         }
+        let entry :DirEntry = item?.unwrap();
+        if entry.file_type().unwrap().is_dir() {
+            if self.recur { self.dirs.push(entry.path().clone()); }
+        }
+        Some(entry)
     }
 }
