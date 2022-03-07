@@ -1,7 +1,12 @@
 
 fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
     let searcher = seek::dirsearcher::DirSearcher::new(dir, recur)?;
-    let mut got :Vec<String> = searcher.collect();
+    let mut got :Vec<String> = searcher
+        .map(|f| f
+            .path()
+            .to_string_lossy()
+            .into_owned())
+        .collect();
     let mut want :Vec<String> = expected
         .into_iter()
         .map(|f| format!("{}/{}",dir,*f))

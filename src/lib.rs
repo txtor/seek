@@ -17,8 +17,12 @@ impl Query {
 
 pub fn run(query: &Query) -> SeekResult<()> {
     let searcher = dirsearcher::DirSearcher::new(".", true)?;
-    for file in searcher {
-        search_file(&file, query)?;
+    for dir_entry in searcher {
+        let path :String = dir_entry
+            .path()
+            .to_string_lossy()
+            .into_owned();
+        search_file(&path, query)?;
     }
     Ok(())
 }

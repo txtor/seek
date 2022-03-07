@@ -4,7 +4,7 @@ use std::fs::{ReadDir,DirEntry};
 pub struct DirSearcher {
     recur :bool,
     entries :ReadDir,
-    dirs :Vec<String>
+    dirs :Vec<DirEntry>
 }
 
 impl DirSearcher {
@@ -18,31 +18,23 @@ impl DirSearcher {
 }
 
 impl Iterator for DirSearcher {
-    type Item = String;
+    type Item = DirEntry;
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             let mut item = self.entries.next();
             while item.is_none() {
                 if self.dirs.is_empty() {
-                    //println!("none");
                     return None;
                 }
-                let dir :String = self.dirs.remove(0);
-                //println!("pop {dir}");
-                self.entries = fs::read_dir(dir).unwrap();
+                let dir :DirEntry = self.dirs.remove(0);
+                self.entries = fs::read_dir(dir.path()).unwrap();
                 item = self.entries.next();
             }
-            //println!("item {item:?}");
             let entry :DirEntry = item?.unwrap();
-            let path :String = entry
-                            .path()
-                            .to_string_lossy()
-                            .into_owned();
-            //println!("path: {path}");
             if entry.file_type().unwrap().is_dir() {
-                if self.recur { self.dirs.push(path); }
+                if self.recur { self.dirs.push(entry); }
             } else {
-                return Some(path)
+                return Some(entry)
             }
         }
     }
