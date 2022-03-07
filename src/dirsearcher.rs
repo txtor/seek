@@ -1,10 +1,11 @@
 use std::fs;
 use std::fs::{ReadDir,DirEntry};
+use std::path::PathBuf;
 
 pub struct DirSearcher {
     recur :bool,
     entries :ReadDir,
-    dirs :Vec<DirEntry>
+    dirs :Vec<PathBuf>
 }
 
 impl DirSearcher {
@@ -26,16 +27,15 @@ impl Iterator for DirSearcher {
                 if self.dirs.is_empty() {
                     return None;
                 }
-                let dir :DirEntry = self.dirs.remove(0);
-                self.entries = fs::read_dir(dir.path()).unwrap();
+                let dir :PathBuf = self.dirs.remove(0);
+                self.entries = fs::read_dir(dir).unwrap();
                 item = self.entries.next();
             }
             let entry :DirEntry = item?.unwrap();
             if entry.file_type().unwrap().is_dir() {
-                if self.recur { self.dirs.push(entry); }
-            } else {
-                return Some(entry)
+                if self.recur { self.dirs.push(entry.path().clone()); }
             }
+            return Some(entry)
         }
     }
 }

@@ -31,17 +31,20 @@ fn dirs_none() -> seek::SeekResult<()> {
 
 #[test] 
 fn dirs_dir1() -> seek::SeekResult<()> {
-    check("tests/inputs/dir1", false, &["a","b","c","d"])
+    check("tests/inputs/dir1", false, &["a","b","c","d","subdir1","subdir2"])
 }
 
 #[test] 
 fn dirs_dir1_recur() -> seek::SeekResult<()> {
     check("tests/inputs/dir1", true, &["a","b","c","d",
+        "subdir1",
         "subdir1/e",
         "subdir1/f",
+        "subdir2",
         "subdir2/g",
         "subdir2/h",
         "subdir2/i",
+        "subdir2/subdir3",
         "subdir2/subdir3/l",
         "subdir2/subdir3/k",
         "subdir2/subdir3/j",
