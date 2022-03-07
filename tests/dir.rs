@@ -26,14 +26,12 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
 
 #[test] 
 fn dirs_none() -> seek::SeekResult<()> {
-    check("tests/inputs/dir2", true, &[])?;
-    Ok(())
+    check("tests/inputs/dir2", true, &[])
 }
 
 #[test] 
 fn dirs_dir1() -> seek::SeekResult<()> {
-    check("tests/inputs/dir1", false, &["a","b","c","d"])?;
-    Ok(())
+    check("tests/inputs/dir1", false, &["a","b","c","d"])
 }
 
 #[test] 
@@ -48,6 +46,5 @@ fn dirs_dir1_recur() -> seek::SeekResult<()> {
         "subdir2/subdir3/k",
         "subdir2/subdir3/j",
         "subdir2/subdir3/m",
-        ])?;
-    Ok(())
+        ])
 }
