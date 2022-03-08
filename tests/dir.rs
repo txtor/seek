@@ -11,9 +11,9 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
         panic!("expected {} files, got {} files",expected.len(),got.len());
     }
     let mut want :Vec<String> = expected
-    .into_iter()
-    .map(|f| format!("{}/{}",dir,*f))
-    .collect();
+        .into_iter()
+        .map(|f| format!("{}/{}",dir,*f))
+        .collect();
     got.sort();
     want.sort();
     for i in 0..got.len() {
