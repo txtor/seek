@@ -18,6 +18,7 @@ impl Query {
 pub fn run(query: &Query) -> SeekResult<()> {
     let searcher = dirsearcher::DirSearcher::new(".", true)?;
     for dir_entry in searcher {
+        if dir_entry.path().is_dir() { continue; }
         let path :String = dir_entry
             .path()
             .to_string_lossy()
