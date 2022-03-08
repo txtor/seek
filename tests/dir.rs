@@ -11,11 +11,11 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
         .into_iter()
         .map(|f| format!("{}/{}",dir,*f))
         .collect();
-    got.sort();
-    want.sort();
     if got.len() != want.len() {
         panic!("expected {} files, got {} files",want.len(),got.len());
     }
+    got.sort();
+    want.sort();
     for i in 0..got.len() {
         if got[i] != want[i] {
             panic!("expected {}, got {}",want[i],got[i]);
