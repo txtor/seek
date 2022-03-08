@@ -25,13 +25,25 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
 }
 
 #[test] 
-fn dirs_none() -> seek::SeekResult<()> {
+fn empty_dir() -> seek::SeekResult<()> {
     check("tests/inputs/dir2", true, &[])
 }
 
 #[test] 
+#[should_panic]
+fn unexisting_dir() {
+    let searcher = seek::dirsearcher::DirSearcher::new("tests/inputs/dir0", true).unwrap();
+}
+
+#[test]
 fn dirs_dir1() -> seek::SeekResult<()> {
     check("tests/inputs/dir1", false, &["a","b","c","d","subdir1","subdir2"])
+}
+
+#[test]
+#[should_panic]
+fn check_fail() {
+    check("tests/inputs/dir1", false, &["a","b","C","d","subdir1","subdir2"]).unwrap();
 }
 
 #[test] 
