@@ -6,7 +6,7 @@ fn get_args(args :&[&str]) -> Vec<String> {
 #[test] 
 fn args_none() -> seek::SeekResult<()> {
     let args :Vec<String> = get_args(&[""]);
-    let query :seek::Query = seek::parse_config(&args);
+    let query :seek::Query = seek::parse_query(&args);
     assert_eq!(query.get_targets().len(),0);
     Ok(())
 }
@@ -14,7 +14,7 @@ fn args_none() -> seek::SeekResult<()> {
 #[test] 
 fn args_one() -> seek::SeekResult<()> {
     let args :Vec<String> = get_args(&["","main"]);
-    let query :seek::Query = seek::parse_config(&args);
+    let query :seek::Query = seek::parse_query(&args);
     assert_eq!(query.get_targets().len(), 1);
     Ok(())
 }

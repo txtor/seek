@@ -28,7 +28,7 @@ pub fn run(query: &Query) -> SeekResult<()> {
     Ok(())
 }
 
-pub fn parse_config(args: &[String]) -> Query {
+pub fn parse_query(args: &[String]) -> Query {
     let targets :Vec<String> = if args.len() > 1 {
         args[1..].to_vec()
     } else {
