@@ -7,13 +7,13 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
             .to_string_lossy()
             .into_owned())
         .collect();
-    let mut want :Vec<String> = expected
-        .into_iter()
-        .map(|f| format!("{}/{}",dir,*f))
-        .collect();
-    if got.len() != want.len() {
-        panic!("expected {} files, got {} files",want.len(),got.len());
+    if got.len() != expected.len() {
+        panic!("expected {} files, got {} files",expected.len(),got.len());
     }
+    let mut want :Vec<String> = expected
+    .into_iter()
+    .map(|f| format!("{}/{}",dir,*f))
+    .collect();
     got.sort();
     want.sort();
     for i in 0..got.len() {
