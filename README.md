@@ -9,7 +9,7 @@ Excercise in Rust.
 GNU GENERAL PUBLIC LICENSE, Version 3
 
 ## Usage
-    seek <query string1> <query string1> ...
+    seek <query string 1> <query string 2> ...
 search the current directory and recursively its subdirectories for string files which contain all the given query strings in a line. If no query words are given, all lines are output.
 
 ## About
