@@ -9,8 +9,8 @@ Excercise in Rust.
 GNU GENERAL PUBLIC LICENSE, Version 3
 
 ## Usage
-    seek <query string>
-search all string files in the current directory which contain the query string. If content is an empty string, all lines are matched.
+    seek <query string1> <query string1> ...
+search the current directory and recursively its subdirectories for string files which contain all the given query strings in a line. If no query words are given, all lines are output.
 
 ## About
 This project is a (my first) exercise in Rust. PR with language usage improvements (especially idiomatic Rust) are very welcome.
