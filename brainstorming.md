@@ -2,7 +2,7 @@
 
 ## Target
     seek -t:<target> ...
-target to search for. Default `content`. Supported targets:
+target to search for. Default `line`. Supported targets:
 1. content: the file complete contents
 1. line: single line in content
 1. word: single word in content
