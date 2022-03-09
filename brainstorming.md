@@ -25,6 +25,14 @@ match operation to use. Default `contains`. Supported operations:
 1. lt: the target content is less than the query string
 1. lte: the target content is less than or equal to the query string
 
+## Comparer
+    seek c:<comparer> ...
+comparer function to use when matching. Default `lexic`. Supported:
+1. lexic: compare strings in lexical order case-insensitive 
+1. case: compare strings in lexical order case-sensitive
+1. numeric: compare strings as numbers
+1. regex: interpret query string as a regular expression
+
 ## Output
     seek -o:<type> <format> ...
 defines the format of the output. Default type `csv`. Supported types:
@@ -42,19 +50,28 @@ CSV: `<format>` is the list of output fields separated by a non-word character. 
 1. count: number of matches in the current file
 1. target: the name of the matching target
 
+## Configuration
+    /etc/seek
+    ~/.seek
+    ./.seek
+this files are read at startup in this order and contain the default arguments for every `seek` call. 
+
+Syntax: each line contains an argument as expressed in the command line.
+Lines beginning with `#` are ignored.
+
 ## Alias
-Some common operations:
+Alias for command line arguments can be defined at compile time.
+Examples: 
 
-    seek -t:dir . 
-search in the current directory 
+    search in the given directory
+    -d <dir>
+    -t:dir <dir>
 
-    seek -t:dir -m:begin . 
-search in the current directory  recursively
+    search in the given directory and recursively its subdirectories
+    -r <dir>
+    -t:dir -m:begin <dir>
 
-    seek -t:name -m:end txt
-search files with .txt extension
+    search files with a given extension
+    -e <ext>
+    -t:name -m:end <ext>
 
-One could define argument alias for common operations. This could be defined at compile time or by the user at a `.seek` file.
-
-## Open Questions
-How to match case sensitive/insensitive? Introducing separate match operators wouldn't be orthogonal, would it? Introduce a "comparer" argument?
