@@ -49,3 +49,18 @@ fn match_twice() {
     check(&"tests/inputs/dir1/c", &query, &["Spürest du","Ruhest du auch."]);
 }
 
+#[test] 
+fn match_all_content() {
+    let query = seek::Query::from_strs(&[]);
+    let content = &[
+        "Über allen Gipfeln",
+        "Ist Ruh',",
+        "In allen Wipfeln",
+        "Spürest du",
+        "Kaum einen Hauch;",
+        "Die Vögelein schweigen im Walde.",
+        "Warte nur, balde",
+        "Ruhest du auch."
+    ];
+    check(&"tests/inputs/dir1/c", &query, content);
+}
