@@ -36,7 +36,7 @@ impl<'a> Iterator for FileSearcher<'a> {
             Err(e) => Some(Err(Box::new(e))),
             Ok(0) => None,
             Ok(_) => {
-                lin = lin.trim().to_string(); //how to avoid allocation?
+                if lin.chars().last() == Some('\n') { _ = lin.pop(); }
                 let mut found :bool = true;
                 for target in &self.query.targets {
                     if !lin.contains(target) {

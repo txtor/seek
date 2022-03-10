@@ -9,6 +9,16 @@ pub struct Query {
 }
 
 impl Query {
+    pub fn new(targets :Vec<String>) -> Self {
+        Query { targets }
+    }
+    pub fn from_strs(targets :&[&str]) -> Self {
+        Query::new(targets
+            .into_iter()
+            .map(|f| String::from(*f))
+            .collect()
+        )
+    }
     pub fn get_targets(&self) -> &[String] {
         &self.targets
     }
