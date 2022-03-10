@@ -36,7 +36,7 @@ pub fn run(query: &Query) -> SeekResult<()> {
         for linr in fsearcher {
             match linr {
                 Err(e) => return Err(e),
-                Ok(m) => println!("{}:{}:{}",m.filename,m.line_number,m.line)
+                Ok(m) => println!("{m}")
             }
         }
     }

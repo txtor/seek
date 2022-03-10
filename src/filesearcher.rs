@@ -14,6 +14,12 @@ pub struct FileMatch<'a> {
     pub line : String
 }
 
+impl<'a> std::fmt::Display for FileMatch<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}:{}:{}",self.filename,self.line_number,self.line)
+    }
+}
+
 impl<'a> FileSearcher<'a> {
     pub fn new(filename: &'a str, query: &'a crate::Query) -> crate::SeekResult<Self> {
         match open(filename) {
