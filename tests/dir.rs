@@ -32,7 +32,7 @@ fn empty_dir() -> seek::SeekResult<()> {
 #[test] 
 #[should_panic]
 fn unexisting_dir() {
-    let searcher = seek::dirsearcher::DirSearcher::new("tests/inputs/dir0", true).unwrap();
+    let _ = seek::dirsearcher::DirSearcher::new("tests/inputs/dir0", true).unwrap();
 }
 
 #[test]
