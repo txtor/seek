@@ -13,6 +13,14 @@ pub struct FileMatch<'a> {
     pub line_number : u32,
     pub line : String
 }
+impl<'a> PartialEq for FileMatch<'a> {
+    fn eq(&self, other: &Self) -> bool {
+        self.filename == other.filename
+        && self.line_number == other.line_number
+        && self.line == other.line
+    }
+}
+impl<'a> Eq for FileMatch<'a> {}
 
 impl<'a> std::fmt::Display for FileMatch<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
