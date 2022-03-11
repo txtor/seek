@@ -38,11 +38,8 @@ pub fn run(query: &Query) -> SeekResult<()> {
                 for linr in fsearcher {
                     match linr {
                         Err(e) => {
-                            match e.downcast_ref::<std::io::Error>() {
-                                Some(ee) if ee.kind() == std::io::ErrorKind::InvalidData =>
-                                    break,
-                                _ => { eprintln!("{}: {}", path, e); break},
-                            }
+                            if !ignore_error(&e) { eprintln!("{}: {}", path, e); }
+                            break;
                         },
                         Ok(m) => println!("{m}")
                     }
@@ -53,6 +50,14 @@ pub fn run(query: &Query) -> SeekResult<()> {
     Ok(())
 }
 
+fn ignore_error(e :&Box<dyn std::error::Error>) -> bool {
+    match e.downcast_ref::<std::io::Error>() {
+        Some(ee) if ee.kind() == std::io::ErrorKind::InvalidData =>
+            true,
+        _ => false,
+    }
+}
+
 pub fn parse_query(args: &[String]) -> Query {
     let targets :Vec<String> = if args.len() > 1 {
         args[1..].to_vec()
@@ -61,4 +66,3 @@ pub fn parse_query(args: &[String]) -> Query {
     };
     Query { targets }
 }
-
