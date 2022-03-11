@@ -32,14 +32,25 @@ pub fn run(query: &Query) -> SeekResult<()> {
             .path()
             .to_string_lossy()
             .into_owned();
-        let fsearcher = filesearcher::FileSearcher::new(&path, query)?;
-        for linr in fsearcher {
-            match linr {
-                Err(e) => return Err(e),
-                Ok(m) => println!("{m}")
+        match filesearcher::FileSearcher::new(&path, query) {
+            Err(e) => eprintln!("{}: {}", path, e),
+            Ok(fsearcher) => {
+                for linr in fsearcher {
+                    match linr {
+                        Err(e) => {
+                            match e.downcast_ref::<std::io::Error>() {
+                                Some(ee) if ee.kind() == std::io::ErrorKind::InvalidData =>
+                                    break,
+                                Some(_) => { eprintln!("{}: {}", path, e); break},
+                                None => { eprintln!("{}: {}", path, e); break},
+                            }
+                        },
+                        Ok(m) => println!("{m}")
+                    }
+                }
             }
-        }
-    }
+        };
+    };
     Ok(())
 }
 
