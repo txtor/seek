@@ -19,6 +19,14 @@ impl Query {
             .collect()
         )
     }
+    pub fn from_args(args: &[String]) -> Query {
+        Query::new(args
+            .into_iter()
+            .skip(1)
+            .map(|f| String::from(f))
+            .collect()
+        )
+    }
     pub fn get_targets(&self) -> &[String] {
         &self.targets
     }
@@ -58,11 +66,3 @@ fn ignore_error(e :&Box<dyn std::error::Error>) -> bool {
     }
 }
 
-pub fn parse_query(args: &[String]) -> Query {
-    let targets :Vec<String> = if args.len() > 1 {
-        args[1..].to_vec()
-    } else {
-        Vec::new()
-    };
-    Query { targets }
-}
