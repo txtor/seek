@@ -38,27 +38,28 @@ impl<'a> Iterator for FileSearcher<'a> {
     type Item = crate::SeekResult<FileMatch<'a>>;
     fn next(&mut self) -> Option<Self::Item> {
         let mut lin = String::new();
-        match self.file.read_line(&mut lin) {
-            Err(e) => Some(Err(Box::new(e))),
-            Ok(0) => None,
-            Ok(_) => {
-                self.line_number += 1;
-                if lin.chars().last() == Some('\n') { _ = lin.pop(); }
-                let mut found :bool = true;
-                for target in &self.query.targets {
-                    if !lin.contains(target) {
-                        found = false;
-                        break;
+        loop {
+            match self.file.read_line(&mut lin) {
+                Err(e) => return Some(Err(Box::new(e))),
+                Ok(0) => return None,
+                Ok(_) => {
+                    self.line_number += 1;
+                    if lin.chars().last() == Some('\n') { _ = lin.pop(); }
+                    let mut found :bool = true;
+                    for target in &self.query.targets {
+                        if !lin.contains(target) {
+                            found = false;
+                            break;
+                        }
                     }
-                }
-                if found {
-                    Some(Ok(FileMatch { 
-                        filename: self.filename,
-                        line_number: self.line_number,
-                        line :lin
-                    }))
-                } else {
-                    self.next()
+                    if found {
+                        return Some(Ok(FileMatch { 
+                            filename: self.filename,
+                            line_number: self.line_number,
+                            line :lin
+                        }));
+                    };
+                    lin.clear();
                 }
             }
         }
