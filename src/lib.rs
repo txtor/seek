@@ -41,8 +41,7 @@ pub fn run(query: &Query) -> SeekResult<()> {
                             match e.downcast_ref::<std::io::Error>() {
                                 Some(ee) if ee.kind() == std::io::ErrorKind::InvalidData =>
                                     break,
-                                Some(_) => { eprintln!("{}: {}", path, e); break},
-                                None => { eprintln!("{}: {}", path, e); break},
+                                _ => { eprintln!("{}: {}", path, e); break},
                             }
                         },
                         Ok(m) => println!("{m}")
