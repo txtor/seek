@@ -1,18 +1,11 @@
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FileMatch<'a> {
     pub filename :&'a str,
     pub line_number :u32,
     pub line :String
-}
-impl<'a> PartialEq for FileMatch<'a> {
-    fn eq(&self, other: &Self) -> bool {
-        self.filename == other.filename
-        && self.line_number == other.line_number
-        && self.line == other.line
-    }
 }
 impl<'a> Eq for FileMatch<'a> {}
 
