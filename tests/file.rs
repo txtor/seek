@@ -5,7 +5,7 @@ fn check(filename :&str, query :&seek::Query, expected :&[(u32,&str)]) {
             .unwrap())
         .collect();
     if got.len() != expected.len() {
-        panic!("expected {} files, got {} files",expected.len(),got.len());
+        panic!("expected {} matches, got {} matches",expected.len(),got.len());
     }
     let want :Vec<seek::filesearcher::FileMatch> = expected
         .into_iter()
