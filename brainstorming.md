@@ -76,5 +76,9 @@ Examples:
     -t:name -m:end <ext>
 
 ## To think about
-Search for files by permission (not readable by u, executable, ...)
-Search for broken symbolic links
+- Search for files by permission (not readable by u, executable, ...)
+- Search for broken symbolic links
+
+## To do
+- Better error message on error trying to open a directory: mention the directory name.
+- All error message should begin with the program name (seek)
