@@ -35,11 +35,11 @@ comparer function to use when matching. Default `lexic`. Supported:
 
 ## Output
     seek -o:<type> <format> ...
-defines the format of the output. Default type `csv`. Supported types:
-1. csv: comma (or other non-word character) separated values
+defines the format of the output. Default type `psv`. Supported types:
+1. psv: punctuation separated values
 1. json: json array
 
-CSV: `<format>` is the list of output fields separated by a non-word character. Determines which fields and which separator to output. Default: `path:num:line`. Supported fields:
+PSV: `<format>` is the list of output fields separated by a punctuation character. Determines which fields to output and how to separate them. Default: `path:num:line`. Supported fields:
 1. path: full file name
 1. name: file name (without path)
 1. dir: file path (without file name)
@@ -74,4 +74,3 @@ Examples:
     search files with a given extension
     -e <ext>
     -t:name -m:end <ext>
-
