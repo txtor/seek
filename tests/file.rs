@@ -15,11 +15,7 @@ fn check(filename :&str, query :&seek::Query, expected :&[(u32,&str)]) {
             line: String::from(f.1)
         })
         .collect();
-    for i in 0..got.len() {
-        if got[i] != want[i] {
-            panic!("expected >{}<, got >{}<",want[i],got[i]);
-        }
-    }
+    assert_eq!(got,want);
 }
 
 #[test] 

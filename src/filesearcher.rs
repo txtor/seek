@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 
+#[derive(Debug)]
 pub struct FileMatch<'a> {
     pub filename :&'a str,
     pub line_number :u32,
