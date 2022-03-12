@@ -15,7 +15,7 @@ impl Query {
     pub fn from_strs(targets :&[&str]) -> Self {
         Query::new(targets
             .into_iter()
-            .map(|f| String::from(*f))
+            .map(|t| String::from(*t))
             .collect()
         )
     }
