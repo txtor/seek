@@ -17,11 +17,7 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
         .collect();
     got.sort();
     want.sort();
-    for i in 0..got.len() {
-        if got[i] != want[i] {
-            panic!("expected {}, got {}",want[i],got[i]);
-        }
-    }
+    assert_eq!(got,want);
     Ok(())
 }
 
