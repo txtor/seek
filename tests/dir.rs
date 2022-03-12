@@ -3,6 +3,7 @@ fn check(dir :&str, recur :bool, expected :&[&str]) -> seek::SeekResult<()> {
     let searcher = seek::dirsearcher::DirSearcher::new(dir, recur)?;
     let mut got :Vec<String> = searcher
         .map(|f| f
+            .unwrap()
             .path()
             .to_string_lossy()
             .into_owned())

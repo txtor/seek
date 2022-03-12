@@ -19,21 +19,30 @@ impl DirSearcher {
 }
 
 impl Iterator for DirSearcher {
-    type Item = DirEntry;
+    type Item = crate::SeekResult<DirEntry>;
     fn next(&mut self) -> Option<Self::Item> {
         let mut item = self.entries.next();
-        while item.is_none() {
-            if self.dirs.is_empty() {
-                return None;
-            }
+        while item.is_none() && !self.dirs.is_empty() {
             let dir :PathBuf = self.dirs.remove(0);
-            self.entries = fs::read_dir(dir).unwrap();
+            match fs::read_dir(dir) {
+                Ok(entries) => self.entries = entries,
+                Err(e) => return Some(Err(Box::new(e)))
+            }
             item = self.entries.next();
         }
-        let entry :DirEntry = item?.unwrap();
-        if entry.file_type().unwrap().is_dir() {
-            if self.recur { self.dirs.push(entry.path().clone()); }
+        match item {
+            None => None,
+            Some(Ok(entry)) => {
+                if self.recur { 
+                    if let Ok(file_type) = entry.file_type() {    
+                        if file_type.is_dir() {                    
+                            self.dirs.push(entry.path().clone()); 
+                        }
+                    }
+                }
+                Some(Ok(entry))
+            },
+            Some(Err(e)) => Some(Err(Box::new(e)))
         }
-        Some(entry)
     }
 }

@@ -34,26 +34,31 @@ impl Query {
 
 pub fn run(query: &Query) -> SeekResult<()> {
     let dsearcher = dirsearcher::DirSearcher::new(".", true)?;
-    for dir_entry in dsearcher {
-        if dir_entry.path().is_dir() { continue; }
-        let path :String = dir_entry
-            .path()
-            .to_string_lossy()
-            .into_owned();
-        match filesearcher::FileSearcher::new(&path, query) {
-            Err(e) => eprintln!("{}: {}", path, e),
-            Ok(fsearcher) => {
-                for linr in fsearcher {
-                    match linr {
-                        Err(e) => {
-                            if !ignore_error(&e) { eprintln!("{}: {}", path, e); }
-                            break;
-                        },
-                        Ok(m) => println!("{m}")
+    for dir_entry_r in dsearcher {
+        match dir_entry_r {
+            Ok(dir_entry) => {
+                if dir_entry.path().is_dir() { continue; }
+                let path :String = dir_entry
+                    .path()
+                    .to_string_lossy()
+                    .into_owned();
+                match filesearcher::FileSearcher::new(&path, query) {
+                    Err(e) => eprintln!("{}: {}", path, e),
+                    Ok(fsearcher) => {
+                        for linr in fsearcher {
+                            match linr {
+                                Err(e) => {
+                                    if !ignore_error(&e) { eprintln!("{}: {}", path, e); }
+                                    break;
+                                },
+                                Ok(m) => println!("{m}")
+                            }
+                        }
                     }
                 }
             }
-        };
+            Err(e) => eprintln!("{}", e)
+        };        
     };
     Ok(())
 }
