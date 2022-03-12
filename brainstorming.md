@@ -74,3 +74,7 @@ Examples:
     search files with a given extension
     -e <ext>
     -t:name -m:end <ext>
+
+## To think about
+Search for files by permission (not readable by u, executable, ...)
+Search for broken symbolic links
