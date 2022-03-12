@@ -23,7 +23,7 @@ impl Query {
         Query::new(args
             .into_iter()
             .skip(1)
-            .map(|f| String::from(f))
+            .map(|a| a.clone())
             .collect()
         )
     }
