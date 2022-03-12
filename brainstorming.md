@@ -5,7 +5,7 @@
 target to search for. Default `line`. Supported targets:
 1. content: the file complete contents
 1. line: single line in content
-1. word: single word in content
+1. word: whole words in content
 1. path: full file name
 1. name: file name (without path)
 1. dir: file path (without file name)
