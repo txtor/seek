@@ -9,17 +9,17 @@ pub struct Query {
 }
 
 impl Query {
-    pub fn new(targets :Vec<String>) -> Self {
-        Query { targets }
+    pub fn new(targets :Vec<String>) -> SeekResult<Self> {
+        Ok(Query { targets })
     }
-    pub fn from_strs(targets :&[&str]) -> Self {
+    pub fn from_strs(targets :&[&str]) -> SeekResult<Self> {
         Query::new(targets
             .into_iter()
             .map(|t| String::from(*t))
             .collect()
         )
     }
-    pub fn from_args(args: &[String]) -> Query {
+    pub fn from_args(args: &[String]) -> SeekResult<Self> {
         Query::new(args
             .into_iter()
             .skip(1)

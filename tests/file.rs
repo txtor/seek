@@ -25,25 +25,25 @@ fn check(filename :&str, query :&seek::Query, expected :&[(u32,&str)]) {
 #[test] 
 fn no_match() {
     let query = seek::Query::from_strs(&["blah"]);
-    check(&"tests/inputs/dir1/a", &query, &[]);
+    check(&"tests/inputs/dir1/a", &query.unwrap(), &[]);
 }
 
 #[test] 
 fn match_line_without_ln() {
     let query = seek::Query::from_strs(&["alpha"]);
-    check(&"tests/inputs/dir1/a", &query, &[(1,"alpha beta")]);
+    check(&"tests/inputs/dir1/a", &query.unwrap(), &[(1,"alpha beta")]);
 }
 
 #[test] 
 fn match_line_with_ln() {
     let query = seek::Query::from_strs(&["alpha"]);
-    check(&"tests/inputs/dir1/b", &query, &[(1,"alpha beta")]);
+    check(&"tests/inputs/dir1/b", &query.unwrap(), &[(1,"alpha beta")]);
 }
 
 #[test] 
 fn match_once_in_word() {
     let query = seek::Query::from_strs(&["Wald"]);
-    check(&"tests/inputs/dir1/c", &query, &[
+    check(&"tests/inputs/dir1/c", &query.unwrap(), &[
         (6,"Die Vögelein schweigen im Walde.")
         ]);
 }
@@ -51,7 +51,7 @@ fn match_once_in_word() {
 #[test] 
 fn match_twice() {
     let query = seek::Query::from_strs(&["du"]);
-    check(&"tests/inputs/dir1/c", &query, &[
+    check(&"tests/inputs/dir1/c", &query.unwrap(), &[
         (4,"Spürest du"),
         (8,"Ruhest du auch.")
         ]);
@@ -70,5 +70,5 @@ fn match_all_content() {
         (7,"Warte nur, balde"),
         (8,"Ruhest du auch.")
     ];
-    check(&"tests/inputs/dir1/c", &query, content);
+    check(&"tests/inputs/dir1/c", &query.unwrap(), content);
 }
