@@ -24,6 +24,7 @@ pub struct FileSearcher<'a> {
 
 impl<'a> FileSearcher<'a> {
     pub fn new(filename: &'a str, query: &'a crate::Query) -> std::io::Result<Self> {
+        query.checker.clear();
         match open(filename) {
             Err(e) => Err(e),
             Ok(file) => Ok(FileSearcher { 
@@ -54,14 +55,7 @@ impl<'a> Iterator for FileSearcher<'a> {
                 Ok(_) => {
                     self.line_number += 1;
                     if lin.chars().last() == Some('\n') { _ = lin.pop(); }
-                    let mut found :bool = true;
-                    for target in &self.query.targets {
-                        if !lin.contains(target) {
-                            found = false;
-                            break;
-                        }
-                    }
-                    if found {
+                    if self.query.checker.check(self.query, self.line_number, &lin) {
                         return Some(Ok(FileMatch { 
                             filename: self.filename,
                             line_number: self.line_number,

@@ -1,16 +1,30 @@
 pub mod dirsearcher;
 pub mod filesearcher;
+pub mod line_checker;
 
 pub type SeekResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
-#[derive(Debug)]
 pub struct Query {
+    checker :Box<dyn Checker>,
     targets :Vec<String>
+}
+impl std::fmt::Display for Query {
+    fn fmt(&self, f :&mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}",self.targets)
+    }
+}
+
+pub trait Checker {
+    fn check(&self, query :&Query, num :u32, line :&str) -> bool;
+    fn clear(&self);
 }
 
 impl Query {
     pub fn new(targets :Vec<String>) -> SeekResult<Self> {
-        Ok(Query { targets })
+        Ok(Query {
+            checker: Box::new(line_checker::LineChecker{}),
+            targets
+        })
     }
     pub fn from_strs(targets :&[&str]) -> SeekResult<Self> {
         Query::new(targets
@@ -29,6 +43,9 @@ impl Query {
     }
     pub fn get_targets(&self) -> &[String] {
         &self.targets
+    }
+    pub fn set_checker(&mut self, checker :Box<dyn Checker>) {
+        self.checker = checker;
     }
 }
 
