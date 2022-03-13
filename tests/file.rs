@@ -68,3 +68,13 @@ fn match_all_content() {
     ];
     check(&"tests/inputs/dir1/c", &query.unwrap(), content);
 }
+
+#[test]
+fn search_in_whole_file() {
+    let mut query = seek::Query::from_strs(&["Wart","Ruh"]).unwrap();
+    query.set_checker(Box::new(seek::line_checker::LineChecker{}));
+    check(&"tests/inputs/dir1/c", &query, &[
+        (7,"Warte nur, balde"),
+        (8,"Ruhest du auch.")
+        ]);
+}

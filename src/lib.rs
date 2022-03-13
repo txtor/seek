@@ -4,25 +4,21 @@ pub mod line_checker;
 
 pub type SeekResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
-pub struct Query {
-    checker :Box<dyn Checker>,
+pub struct Query<'a> {
+    checker :Box<dyn filesearcher::Checker<'a>>,
     targets :Vec<String>
 }
-impl std::fmt::Display for Query {
+impl<'a> std::fmt::Display for Query<'a> {
     fn fmt(&self, f :&mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{:?}",self.targets)
     }
 }
 
-pub trait Checker {
-    fn check(&self, query :&Query, num :u32, line :&str) -> bool;
-    fn clear(&self);
-}
-
-impl Query {
+impl<'a> Query<'a> {
     pub fn new(targets :Vec<String>) -> SeekResult<Self> {
+        let checker = line_checker::LineChecker::new();
         Ok(Query {
-            checker: Box::new(line_checker::LineChecker{}),
+            checker: Box::new(checker),
             targets
         })
     }
@@ -44,7 +40,7 @@ impl Query {
     pub fn get_targets(&self) -> &[String] {
         &self.targets
     }
-    pub fn set_checker(&mut self, checker :Box<dyn Checker>) {
+    pub fn set_checker(&mut self, checker :Box<dyn filesearcher::Checker<'a>>) {
         self.checker = checker;
     }
 }
@@ -87,4 +83,3 @@ fn ignore_error(e :&Box<dyn std::error::Error>) -> bool {
         _ => false,
     }
 }
-

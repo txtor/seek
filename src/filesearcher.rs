@@ -15,24 +15,31 @@ impl<'a> std::fmt::Display for FileMatch<'a> {
     }
 }
 
+pub trait Checker<'a> {
+    fn open_search(&mut self, filesearcher :&'a FileSearcher) -> std::io::Result<()>;
+    fn check(&self, line :&str) -> bool;
+}
+
 pub struct FileSearcher<'a> {
-    file :Box<dyn BufRead>,
-    query: &'a crate::Query,
-    filename :&'a str,
-    line_number :u32,
+    pub file :Box<dyn BufRead>,
+    pub query: &'a crate::Query<'a>,
+    pub filename :&'a str,
+    pub line_number :u32,
 }
 
 impl<'a> FileSearcher<'a> {
-    pub fn new(filename: &'a str, query: &'a crate::Query) -> std::io::Result<Self> {
-        query.checker.clear();
+    pub fn new(filename: &'a str, query: &'a crate::Query<'a>) -> std::io::Result<Self> {
+        let file = open(filename)?;
+        let fsearcher = FileSearcher { 
+            file: file,
+            query: query,
+            filename: filename,
+            line_number: 0
+        };
+        query.checker.open_search(&fsearcher);
         match open(filename) {
             Err(e) => Err(e),
-            Ok(file) => Ok(FileSearcher { 
-                file: file,
-                query: query,
-                filename: filename,
-                line_number: 0
-            })
+            Ok(file) => Ok(fsearcher)
         }
     }
 }
@@ -55,7 +62,7 @@ impl<'a> Iterator for FileSearcher<'a> {
                 Ok(_) => {
                     self.line_number += 1;
                     if lin.chars().last() == Some('\n') { _ = lin.pop(); }
-                    if self.query.checker.check(self.query, self.line_number, &lin) {
+                    if self.query.checker.check(&lin) {
                         return Some(Ok(FileMatch { 
                             filename: self.filename,
                             line_number: self.line_number,
