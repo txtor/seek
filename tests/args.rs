@@ -1,51 +1,48 @@
-
-fn get_args(args :&[&str]) -> Vec<String> {
+fn get_args(args: &[&str]) -> Vec<String> {
     (*args).into_iter().map(|a| String::from(*a)).collect()
 }
 
-#[test] 
+#[test]
 fn args_none() -> seek::SeekResult<()> {
-    let args :Vec<String> = get_args(&[""]);
+    let args: Vec<String> = get_args(&[""]);
     let query = seek::Query::from_args(&args);
-    assert_eq!(query.unwrap().get_targets().len(),0);
+    assert_eq!(query.unwrap().get_targets().len(), 0);
     Ok(())
 }
 
-#[test] 
+#[test]
 fn args_one() -> seek::SeekResult<()> {
-    let args :Vec<String> = get_args(&["","main"]);
+    let args: Vec<String> = get_args(&["", "main"]);
     let query = seek::Query::from_args(&args);
     assert_eq!(query.unwrap().get_targets().len(), 1);
     Ok(())
 }
 
-#[test] 
+#[test]
 fn args_two() -> seek::SeekResult<()> {
-    let args :Vec<String> = get_args(&["","blah","main"]);
+    let args: Vec<String> = get_args(&["", "blah", "main"]);
     let query = seek::Query::from_args(&args);
     assert_eq!(query.unwrap().get_targets().len(), 2);
     Ok(())
 }
 
-#[test] 
+#[test]
 fn strs_none() -> seek::SeekResult<()> {
     let query = seek::Query::from_strs(&[]);
-    assert_eq!(query.unwrap().get_targets().len(),0);
+    assert_eq!(query.unwrap().get_targets().len(), 0);
     Ok(())
 }
 
-#[test] 
+#[test]
 fn strs_one() -> seek::SeekResult<()> {
     let query = seek::Query::from_strs(&["main"]);
     assert_eq!(query.unwrap().get_targets().len(), 1);
     Ok(())
 }
 
-
-#[test] 
+#[test]
 fn strs_two() -> seek::SeekResult<()> {
-    let query = seek::Query::from_strs(&["blah","void"]);
+    let query = seek::Query::from_strs(&["blah", "void"]);
     assert_eq!(query.unwrap().get_targets().len(), 2);
     Ok(())
 }
-

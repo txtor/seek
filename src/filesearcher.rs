@@ -3,23 +3,23 @@ use std::io::{self, BufRead, BufReader};
 
 #[derive(Debug, PartialEq)]
 pub struct FileMatch<'a> {
-    pub filename :&'a str,
-    pub line_number :u32,
-    pub line :String
+    pub filename: &'a str,
+    pub line_number: u32,
+    pub line: String,
 }
 impl<'a> Eq for FileMatch<'a> {}
 
 impl<'a> std::fmt::Display for FileMatch<'a> {
-    fn fmt(&self, f :&mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}:{}:{}",self.filename,self.line_number,self.line)
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}:{}:{}", self.filename, self.line_number, self.line)
     }
 }
 
 pub struct FileSearcher<'a> {
-    file :Box<dyn BufRead>,
+    file: Box<dyn BufRead>,
     query: &'a crate::Query,
-    filename :&'a str,
-    line_number :u32,
+    filename: &'a str,
+    line_number: u32,
 }
 
 impl<'a> FileSearcher<'a> {
@@ -27,12 +27,12 @@ impl<'a> FileSearcher<'a> {
         query.checker.clear();
         match open(filename) {
             Err(e) => Err(e),
-            Ok(file) => Ok(FileSearcher { 
+            Ok(file) => Ok(FileSearcher {
                 file: file,
                 query: query,
                 filename: filename,
-                line_number: 0
-            })
+                line_number: 0,
+            }),
         }
     }
 }
@@ -54,12 +54,14 @@ impl<'a> Iterator for FileSearcher<'a> {
                 Ok(0) => return None,
                 Ok(_) => {
                     self.line_number += 1;
-                    if lin.chars().last() == Some('\n') { _ = lin.pop(); }
+                    if lin.chars().last() == Some('\n') {
+                        _ = lin.pop();
+                    }
                     if self.query.checker.check(self.query, self.line_number, &lin) {
-                        return Some(Ok(FileMatch { 
+                        return Some(Ok(FileMatch {
                             filename: self.filename,
                             line_number: self.line_number,
-                            line: lin
+                            line: lin,
                         }));
                     };
                     lin.clear();
