@@ -6,11 +6,11 @@ pub type SeekResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 pub struct Query {
     checker: Box<dyn Checker>,
-    targets: Vec<String>,
+    tokens: Vec<String>,
 }
 impl std::fmt::Display for Query {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{:?}", self.targets)
+        write!(f, "{:?}", self.tokens)
     }
 }
 
@@ -20,20 +20,20 @@ pub trait Checker {
 }
 
 impl Query {
-    pub fn new(targets: Vec<String>) -> SeekResult<Self> {
+    pub fn new(tokens: Vec<String>) -> SeekResult<Self> {
         Ok(Query {
             checker: Box::new(line_checker::LineChecker {}),
-            targets,
+            tokens,
         })
     }
-    pub fn from_strs(targets: &[&str]) -> SeekResult<Self> {
-        Query::new(targets.into_iter().map(|t| String::from(*t)).collect())
+    pub fn from_strs(tokens: &[&str]) -> SeekResult<Self> {
+        Query::new(tokens.into_iter().map(|t| String::from(*t)).collect())
     }
     pub fn from_args(args: &[String]) -> SeekResult<Self> {
         Query::new(args.into_iter().skip(1).map(|a| a.clone()).collect())
     }
-    pub fn get_targets(&self) -> &[String] {
-        &self.targets
+    pub fn get_tokens(&self) -> &[String] {
+        &self.tokens
     }
     pub fn set_checker(&mut self, checker: Box<dyn Checker>) {
         self.checker = checker;
