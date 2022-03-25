@@ -1,3 +1,4 @@
+use std::io::BufRead;
 pub mod dirsearcher;
 pub mod filesearcher;
 pub mod line_checker;
@@ -5,24 +6,37 @@ pub mod line_checker;
 pub type SeekResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 pub struct Query {
-    checker: Box<dyn Checker>,
+    target: Target,
     tokens: Vec<String>,
 }
+
 impl std::fmt::Display for Query {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{:?}", self.tokens)
     }
 }
 
+pub enum Target {
+    Line
+}
+impl Target {
+    fn get_checker(&self, query: &Query) -> Box<dyn Checker> {
+        match self {
+            Target::Line => Box::new(line_checker::LineChecker::new(query))
+        }
+    }
+}
+
 pub trait Checker {
-    fn check(&self, query: &Query, num: u32, line: &str) -> bool;
-    fn clear(&self);
+    fn check_file(&self, file: &Box<dyn BufRead>);
+    fn check_line(&self, line: &str) -> bool;
+    fn end_of_search(&self) -> bool;
 }
 
 impl Query {
     pub fn new(tokens: Vec<String>) -> SeekResult<Self> {
         Ok(Query {
-            checker: Box::new(line_checker::LineChecker {}),
+            target: Target::Line,
             tokens,
         })
     }
@@ -34,9 +48,6 @@ impl Query {
     }
     pub fn get_tokens(&self) -> &[String] {
         &self.tokens
-    }
-    pub fn set_checker(&mut self, checker: Box<dyn Checker>) {
-        self.checker = checker;
     }
 }
 

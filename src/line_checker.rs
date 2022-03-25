@@ -1,17 +1,26 @@
-#[derive(Debug)]
-pub struct LineChecker {}
+use std::io::BufRead;
+
+pub struct LineChecker {
+    tokens: Vec<String>,
+}
+
+impl LineChecker {
+    pub fn new(query: &crate::Query) -> Self {
+        Self { tokens: query.tokens.clone() }
+    }
+}
 
 impl crate::Checker for LineChecker {
-    #[allow(unused_variables)]
-    fn check(&self, query: &crate::Query, num: u32, lin: &str) -> bool {
+    fn check_file(&self, _file: &Box<dyn BufRead>) { }
+    fn end_of_search(&self) -> bool { false }
+    fn check_line(&self, line: &str) -> bool {
         let mut found: bool = true;
-        for target in query.get_tokens() {
-            if !lin.contains(target) {
+        for token in &self.tokens {
+            if !line.contains(token) {
                 found = false;
                 break;
             }
         }
         found
     }
-    fn clear(&self) {}
 }
