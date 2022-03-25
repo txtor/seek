@@ -33,9 +33,9 @@ impl<'a> FileSearcher<'a> {
                     file,
                     filename,
                     line_number: 0,
-                    checker
-                    })
-            },
+                    checker,
+                })
+            }
         }
     }
 }

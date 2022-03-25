@@ -17,12 +17,12 @@ impl std::fmt::Display for Query {
 }
 
 pub enum Target {
-    Line
+    Line,
 }
 impl Target {
     fn get_checker(&self, query: &Query) -> Box<dyn Checker> {
         match self {
-            Target::Line => Box::new(line_checker::LineChecker::new(query))
+            Target::Line => Box::new(line_checker::LineChecker::new(query)),
         }
     }
 }
