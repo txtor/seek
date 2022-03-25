@@ -28,7 +28,7 @@ impl Target {
 }
 
 pub trait Checker {
-    fn check_file(&self, file: &Box<dyn BufRead>);
+    fn check_file(&self, file: &dyn BufRead);
     fn check_line(&self, line: &str) -> bool;
     fn end_of_search(&self) -> bool;
 }
@@ -41,10 +41,10 @@ impl Query {
         })
     }
     pub fn from_strs(tokens: &[&str]) -> SeekResult<Self> {
-        Query::new(tokens.into_iter().map(|t| String::from(*t)).collect())
+        Query::new(tokens.iter().map(|t| String::from(*t)).collect())
     }
     pub fn from_args(args: &[String]) -> SeekResult<Self> {
-        Query::new(args.into_iter().skip(1).map(|a| a.clone()).collect())
+        Query::new(args.iter().skip(1).cloned().collect())
     }
     pub fn get_tokens(&self) -> &[String] {
         &self.tokens

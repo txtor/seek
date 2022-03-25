@@ -11,7 +11,7 @@ impl LineChecker {
 }
 
 impl crate::Checker for LineChecker {
-    fn check_file(&self, _file: &Box<dyn BufRead>) { }
+    fn check_file(&self, _file: &dyn BufRead) { }
     fn end_of_search(&self) -> bool { false }
     fn check_line(&self, line: &str) -> bool {
         let mut found: bool = true;

@@ -11,7 +11,7 @@ pub struct DirSearcher {
 impl DirSearcher {
     pub fn new(dir: &str, recur: bool) -> crate::SeekResult<Self> {
         Ok(DirSearcher {
-            recur: recur,
+            recur,
             entries: fs::read_dir(dir)?,
             dirs: Vec::new(),
         })
@@ -36,7 +36,7 @@ impl Iterator for DirSearcher {
                 if self.recur {
                     if let Ok(file_type) = entry.file_type() {
                         if file_type.is_dir() {
-                            self.dirs.push(entry.path().clone());
+                            self.dirs.push(entry.path());
                         }
                     }
                 }

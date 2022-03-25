@@ -30,8 +30,8 @@ impl<'a> FileSearcher<'a> {
                 let checker = query.target.get_checker(query);
                 checker.check_file(&file);
                 Ok(FileSearcher {
-                    file: file,
-                    filename: filename,
+                    file,
+                    filename,
                     line_number: 0,
                     checker
                     })
@@ -60,7 +60,7 @@ impl<'a> Iterator for FileSearcher<'a> {
                 Ok(0) => return None,
                 Ok(_) => {
                     self.line_number += 1;
-                    if lin.chars().last() == Some('\n') {
+                    if lin.ends_with('\n') {
                         _ = lin.pop();
                     }
                     if self.checker.check_line(&lin) {
